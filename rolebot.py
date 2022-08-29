@@ -71,10 +71,10 @@ async def on_ready():
 		[message, success] = load_settings(settings_file.read())
 		logger.log(message)
 		settings_file.close()
+		if success:
+			await update_messages()
 	except Exception as e:
 		logger.log("Load config error: " + str(e))
-	
-	await update_messages()
 
 # when somone adds a reaction to a message
 @client.event
