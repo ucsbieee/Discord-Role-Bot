@@ -225,7 +225,7 @@ async def update_messages():
 		
 		# create embed
 		def create_embed(message):
-			color = message["color"][2] << 16 | message["color"][1] << 8 | message["color"][0]
+			color = message["color"][0] << 16 | message["color"][1] << 8 | message["color"][2]
 			return discord.Embed(title = message["title"], color = color, description = message["message"])
 		
 		# helper function to associate an old message ID with a new message object
