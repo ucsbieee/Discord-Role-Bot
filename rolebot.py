@@ -170,6 +170,7 @@ async def update_messages():
 	global message_associations
 	global settings
 	
+	message_associations = {}
 	success = True
 	
 	# convert role IDs into role objects
