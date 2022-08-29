@@ -10,6 +10,8 @@ This is a Python-based bot that allows members of our Discord server to give the
   - The bot will try to re-use existing messages if the reactions and roles roughly match the new ones to avoid having to clear all reactions after a restart. If this fails, it will also match on titles.
   - The **"reactions"** dict pairs emojis to role IDs that will be assigned to members when they react with that emoji. Custom emojis can be used by putting the name instead of an emoji character.
 
+Discord can be temperamental with emojis. You may need to remove extra unicode bytes to make it work with some.
+
 ## Required Discord Permissions
 * Manage Roles
 * Manage Messages
