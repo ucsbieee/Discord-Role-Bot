@@ -171,7 +171,7 @@ async def update_messages():
 	global settings
 	
 	message_associations = {}
-	success = True
+	success = 1
 	
 	# convert role IDs into role objects
 	for m in settings["messages"]:
@@ -219,7 +219,7 @@ async def update_messages():
 #								print("user {} reacted to {} and has role {}".format(user.id, old_message.id, new_reactions[emoji_name(old_reaction.emoji)]))
 					except Exception as e:
 						logger.log("Message association error: " + str(e))
-						success = False
+						success = 0
 			i += 1
 		
 		# finalize associations for all new messages
@@ -250,7 +250,7 @@ async def update_messages():
 				try:
 					await from_msg.add_reaction(to_real_emoji(reaction))
 				except Exception as e:
-					logger.log("Associated message emoji update error: " + str(e))
+					logger.log("Associated message emoji add error: " + str(e))
 					return False
 			return True
 		
@@ -270,7 +270,7 @@ async def update_messages():
 				target_association = new_messages[i]
 				success_temp = await associate_messages(max_correlation_message, target_association)
 				if not success_temp:
-					success = False
+					success = -1
 				
 				# don't need to deal with this old message anymore
 				updated_old_messages.remove(max_correlation_message)
@@ -290,7 +290,7 @@ async def update_messages():
 				if new_message["title"] in [e.title for e in old_message.embeds]:
 					success_temp = await associate_messages(old_message, new_message)
 					if not success_temp:
-						success = False
+						success = -1
 					
 					updated_old_messages.remove(old_message)
 					found = True
@@ -316,14 +316,16 @@ async def update_messages():
 					await m.add_reaction(to_real_emoji(emoji))
 				except Exception as e:
 					logger.log("New message emoji add error: " + str(e))
-					success = False
+					success = -1
+					break
 		
 	except Exception as e:
 		logger.log("Message update error: " + str(e))
-		success = False
+		success = 0
 		return success
 	
-	logger.log("Successfully updated messages")
+	if success > 0:
+		logger.log("Successfully updated messages")
 	
 	return success
 
@@ -384,8 +386,10 @@ async def on_message(message):
 		
 		# update messages
 		success = await update_messages()
-		if success:
+		if success > 0:
 			await message.channel.send(content = "Successfully updated messages")
+		elif success == -1:
+			await message.channel.send(content = "Emoji error on message update")
 		else:
 			await message.channel.send(content = "Did not successfully update messages. Check log.")
 
