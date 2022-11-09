@@ -60,10 +60,10 @@ def emoji_name(emoji):
 	else:
 		return emoji.name
 
-# bot started up
+# started up
 @client.event
 async def on_ready():
-	logger.log("Bot running")
+	logger.log("Running")
 	
 	# load settings from file and update messages
 	try:
@@ -75,6 +75,21 @@ async def on_ready():
 			await update_messages()
 	except Exception as e:
 		logger.log("Load config error: " + str(e))
+
+# session resume
+@client.event
+async def on_resumed():
+	logger.log("Resumed")
+
+# connect
+@client.event
+async def on_connect():
+	logger.log("Connected")
+
+# disconnected
+@client.event
+async def on_disconnect():
+	logger.log("Disconnected")
 
 # when somone adds a reaction to a message
 @client.event
