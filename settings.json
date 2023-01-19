@@ -21,11 +21,11 @@
 			}
 		},
 		{
-			"title": "Fall 2022 Projects",
-			"message": "Select the projects you're interested in to get pinged with important information\n\n🇰 <@&1027321020346011689>\n🕓 <@&1027321397590110238>\n🔥 <@&1027321845885710396>\n🕹️ <@&899128718474215424>\n🏎️ <@&767517875324846110>",
+			"title": "Winter 2022 Projects",
+			"message": "Select the projects you're interested in to get pinged with important information\n\n🩴 <@&1065436638341255279>\n🕓 <@&1027321397590110238>\n🔥 <@&1027321845885710396>\n🕹️ <@&899128718474215424>\n🏎️ <@&767517875324846110>",
 			"color": [185, 0, 0],
 			"reactions": {
-				"🇰": 1027321020346011689,
+				"🩴": 1065436638341255279,
 				"🕓": 1027321397590110238,
 				"🔥": 1027321845885710396,
 				"🕹": 899128718474215424,
