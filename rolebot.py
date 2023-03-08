@@ -229,7 +229,7 @@ async def update_messages():
 					try:
 						for j in range(n_messages):
 							new_reactions = new_messages[j]["reactions"]
-							if emoji_name(old_reaction.emoji) in new_reactions and new_reactions[emoji_name(old_reaction.emoji)] in user.roles:
+							if emoji_name(old_reaction.emoji) in new_reactions and hasattr(user, "roles") and new_reactions[emoji_name(old_reaction.emoji)] in user.roles:
 								correlations[old_message.id][j] += 1
 #								print("user {} reacted to {} and has role {}".format(user.id, old_message.id, new_reactions[emoji_name(old_reaction.emoji)]))
 					except Exception as e:
