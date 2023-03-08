@@ -35,6 +35,7 @@ class Logger:
 			self.logfile.flush()
 
 settings = {}
+loading_settings = False
 our_guild = None
 our_channel = None
 message_associations = {}
@@ -69,6 +70,7 @@ async def on_ready():
 	logger.log("Running")
 	
 	# load settings from file and update messages
+	loading_settings = True
 	try:
 		settings_file = open(constants.settings_file_path, "r")
 		[message, success] = load_settings(settings_file.read())
@@ -78,6 +80,7 @@ async def on_ready():
 			await update_messages()
 	except Exception as e:
 		logger.log("Load config error: " + str(e))
+	loading_settings = False
 
 # when somone adds a reaction to a message
 @client.event
@@ -349,6 +352,12 @@ async def on_message(message):
 	if not found:
 		return
 	
+	# make sure we aren't already loading settings
+	if loading_settings:
+		await message.channel.send(content = "Already updating!")
+		return
+	loading_settings = True
+
 	# respond to reload command by fetching new config JSON from web
 	if message.content.lower() == "reload":
 		logger.log("Reload requested by {} (#{})".format(message.author.name, message.author.id))
@@ -366,6 +375,7 @@ async def on_message(message):
 			message_result = "Request from {} failed with status code {}".format(constants.settings_url, request.status_code)
 			logger.log(message_result)
 			await message.channel.send(content = message_result)
+			loading_settings = False
 			return
 		
 		logger.log("Downloaded new config from {}".format(constants.settings_url))
@@ -375,6 +385,7 @@ async def on_message(message):
 		logger.log(message_result)
 		await message.channel.send(content = message_result)
 		if not success:
+			loading_settings = False
 			return # don't save an invalid file
 		
 		# save into local cache
@@ -395,6 +406,8 @@ async def on_message(message):
 			await message.channel.send(content = "Emoji error on message update")
 		else:
 			await message.channel.send(content = "Did not successfully update messages. Check log.")
+
+		loading_settings = False
 
 async def main():
 	logger.log("Bot starting")
