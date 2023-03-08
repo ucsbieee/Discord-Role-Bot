@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 
 import discord
+import logging
 import requests
 from datetime import datetime
 import json
@@ -43,6 +44,8 @@ intents.messages = True
 client = discord.Client(intents = intents)
 logger = Logger()
 
+discord_log_handler = logging.FileHandler(filename="discord.log", encoding="utf-8")
+
 def to_real_emoji(emoji):
 	# convert emoji name into real emoji object
 	real_emoji = emoji
@@ -75,21 +78,6 @@ async def on_ready():
 			await update_messages()
 	except Exception as e:
 		logger.log("Load config error: " + str(e))
-
-# session resume
-@client.event
-async def on_resumed():
-	logger.log("Resumed")
-
-# connect
-@client.event
-async def on_connect():
-	logger.log("Connected")
-
-# disconnected
-@client.event
-async def on_disconnect():
-	logger.log("Disconnected")
 
 # when somone adds a reaction to a message
 @client.event
@@ -410,6 +398,6 @@ async def on_message(message):
 
 async def main():
 	logger.log("Bot starting")
-	await client.start(constants.key)
+	await client.start(constants.key, log_handler = discord_log_handler, log_level = logging.INFO)
 
 asyncio.run(main())
