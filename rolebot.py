@@ -80,6 +80,7 @@ async def on_ready():
 			await update_messages()
 	except Exception as e:
 		logger.log("Load config error: " + str(e))
+		loading_settings = False
 	loading_settings = False
 
 # when somone adds a reaction to a message
@@ -352,14 +353,14 @@ async def on_message(message):
 	if not found:
 		return
 	
-	# make sure we aren't already loading settings
-	if loading_settings:
-		await message.channel.send(content = "Already updating!")
-		return
-	loading_settings = True
-
 	# respond to reload command by fetching new config JSON from web
 	if message.content.lower() == "reload":
+		# make sure we aren't already loading settings
+		if loading_settings:
+			await message.channel.send(content = "Already updating!")
+			return
+		loading_settings = True
+		
 		logger.log("Reload requested by {} (#{})".format(message.author.name, message.author.id))
 		
 		# download
