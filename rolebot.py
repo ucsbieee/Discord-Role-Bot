@@ -67,6 +67,8 @@ def emoji_name(emoji):
 # started up
 @client.event
 async def on_ready():
+	global loading_settings
+	
 	logger.log("Running")
 	
 	# load settings from file and update messages
@@ -339,6 +341,8 @@ async def update_messages():
 # monitor for DMs
 @client.event
 async def on_message(message):
+	global loading_settings
+	
 	# ignore anything that isn't a DM
 	if type(message.channel) is not discord.DMChannel:
 		return
