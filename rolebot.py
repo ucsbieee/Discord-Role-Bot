@@ -16,7 +16,7 @@ class Logger:
 	
 	def __init__(self):
 		try:
-			self.logfile = open(constants.log_file_path, "a")
+			self.logfile = open(constants.rolebot_log_file_path, "a")
 		except:
 			exit(1)
 	
@@ -45,7 +45,7 @@ intents.messages = True
 client = discord.Client(intents = intents)
 logger = Logger()
 
-discord_log_handler = logging.FileHandler(filename="discord.log", encoding="utf-8")
+discord_log_handler = logging.FileHandler(filename = constants.discord_log_file_path, encoding = "utf-8")
 
 def to_real_emoji(emoji):
 	# convert emoji name into real emoji object
@@ -411,6 +411,7 @@ async def on_message(message):
 
 async def main():
 	logger.log("Bot starting")
-	await client.start(constants.key, log_handler = discord_log_handler, log_level = logging.INFO)
+	discord.utils.setup_logging(handler = discord_log_handler, level = logging.INFO)
+	await client.start(constants.key)
 
 asyncio.run(main())
