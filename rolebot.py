@@ -214,6 +214,8 @@ async def update_messages():
 			# try to find best match for each message based on roles of users with reactions
 			correlations[old_message.id] = [0] * n_messages
 			for old_reaction in old_message.reactions:
+				user_count = 0
+				
 				for user in [u async for u in old_reaction.users()]:
 					# ignore our own
 					if user.id == client.user.id:
@@ -229,6 +231,12 @@ async def update_messages():
 					except Exception as e:
 						logger.log("Message association error: " + str(e))
 						success = 0
+					
+					# Limit number of queries we make to Discord to not get rate limited
+					user_count += 1
+					if user_count >= 25:
+						break
+					
 			i += 1
 		
 		# finalize associations for all new messages
